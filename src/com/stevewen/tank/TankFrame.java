@@ -9,9 +9,10 @@ import java.util.ArrayList;
 
 public class TankFrame extends Frame {
 
-    Tank myTank= new Tank(200, 200, Dir.DOWN, this);
+    Tank myTank= new Tank(200, 400, Dir.DOWN, this, Group.GOOD); //TODO: Find how to play duo TankWorld
     ArrayList<Bullet> bullets= new ArrayList<Bullet>();
-    Bullet b= new Bullet(200, 300, Dir.DOWN, this);
+    ArrayList<Tank> tanks= new ArrayList<>();
+    ArrayList<Explode> explodes= new ArrayList<>();
     static final int GAME_WIDTH= 800, GAME_HEIGHT= 600;
 
 
@@ -52,11 +53,31 @@ public class TankFrame extends Frame {
 
     @Override //When the window is re-graphed, this method is invoked, including opening the window for the first time or resizing
     public void paint(Graphics g){
+        Color c= g.getColor();
+        g.setColor(Color.WHITE);
+        g.drawString("Bullets quantity: "+ bullets.size(), 10, 60);
+        g.drawString("Enemy quantity: "+ tanks.size(), 10, 80);
 
         myTank.paint(g);
         for (int i= 0; i< bullets.size(); i++){
             bullets.get(i).paint(g);
         }
+        for (int i= 0; i< tanks.size(); i++){
+            tanks.get(i).paint(g);
+        }
+
+        for (int i= 0; i< explodes.size(); i++){
+            explodes.get(i).paint(g);
+        }
+
+        for(int i= 0; i< bullets.size(); i++){
+            for(int j= 0; j< tanks.size(); j++){
+                bullets.get(i).collideWith(tanks.get(j));
+            }
+
+        }
+
+
     }
 
 
