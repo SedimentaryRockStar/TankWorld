@@ -14,13 +14,14 @@ public class Tank {
     final int SPEED= 5;
     private boolean living= true;
     public static final int WIDTH= ResourceMgr.GOODtankD.getWidth(), HEIGHT= ResourceMgr.GOODtankD.getHeight();
-    private TankFrame tf= null;
+    TankFrame tf= null;
     private Random random= new Random();
     private boolean moving= true; // TODO: Change the version of the main tank
     private Group group= Group.BAD;
 
     Rectangle rect= new Rectangle();
 
+    FireStrategy fs;
 
     public int getX() {
         return x;
@@ -54,7 +55,25 @@ public class Tank {
 
         rect.x= this.x;
         rect.y= this.y;
-    }
+        rect.width= WIDTH;
+        rect.height= HEIGHT;
+
+
+
+
+            try {
+                if(group== Group.GOOD) {
+                    String goodFsName = (String) PropertyMgr.get("goodFs");
+                    fs = (FireStrategy) Class.forName(goodFsName).newInstance();
+                }else {
+                    String badFsName= (String) PropertyMgr.get("badFs");
+                    fs = (FireStrategy) Class.forName(badFsName).newInstance();
+                }
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+            }
+        }
+
 
 
 
@@ -104,6 +123,7 @@ public class Tank {
         if(this.group== Group.BAD && random.nextInt(100)> 95) randomdir();
 
         boundsCheck();
+
         //Update the rect
         rect.x= this.x;
         rect.y= this.y;
@@ -129,30 +149,7 @@ public class Tank {
     }
 
     public void fire(){
-
-        int bX= this.x+ Tank.WIDTH/2;
-        int by= this.y+ Tank.HEIGHT/2;
-
-        switch(this.dir){
-            case UP:
-                bX-= Bullet.WIDTH/2;
-                by-= Bullet.HEIGHT*2;
-                break;
-            case DOWN:
-                bX-= Bullet.WIDTH/2;
-                by+= Bullet.HEIGHT;
-                break;
-            case RIGHT:
-                bX+= Bullet.WIDTH;
-                by-= Bullet.HEIGHT*10/60;
-                break;
-            case LEFT:
-                bX-= Bullet.WIDTH*2;
-                by-= Bullet.HEIGHT/4;
-                break;
-        }
-
-        tf.bullets.add(new Bullet(bX, by, this.dir, this.tf, this.group));
+        fs.fire(this);
     }
 
     public void die(){

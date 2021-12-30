@@ -56,7 +56,7 @@ public class TankFrame extends Frame {
         Color c= g.getColor();
         g.setColor(Color.WHITE);
         g.drawString("Bullets quantity: "+ bullets.size(), 10, 60);
-        g.drawString("Enemy quantity: "+ tanks.size(), 10, 80);
+        g.drawString("Enemy Remaining: "+ tanks.size(), 10, 80);
 
         myTank.paint(g);
         for (int i= 0; i< bullets.size(); i++){

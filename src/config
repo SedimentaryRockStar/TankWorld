@@ -1,0 +1,10 @@
+#Tanks count at initialization
+initTankCount=10
+tankSpeed=50
+bulletSpeed=100
+gameWidth=1080
+gameHeight=720
+#fireStrategy
+goodFs=com.stevewen.tank.FourDirFireStrategy
+badFs=com.stevewen.tank.DefaultFireStrategy
+
